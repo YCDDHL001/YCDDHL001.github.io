@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>山东专升本学习管理系统平台</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 登录页 -->
+<div id="loginPage" class="login-page">
+  <div class="login-container">
+    <div class="login-logo">🛡️</div>
+    <h1 class="login-title">山东专升本</h1>
+    <p class="login-subtitle">学习管理系统平台</p>
+    <div class="login-form">
+      <input type="password" id="devCode" placeholder="请输入开发者激活码" autocomplete="off">
+      <button id="loginBtn" class="btn-primary">进入后台</button>
+    </div>
+    <p id="loginError" class="login-error"></p>
+  </div>
+</div>
+
+<!-- 后台主页面 -->
+<div id="adminPage" class="admin-page hidden">
+  <!-- 侧边栏 -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span>🎓</span>
+      <span>山东专升本学习管理系统平台</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-page="dashboard">
+        <span>📊</span>
+        <span>数据看板</span>
+      </a>
+      <a class="nav-item" data-page="users">
+        <span>👥</span>
+        <span>用户管理</span>
+      </a>
+      <a class="nav-item" data-page="codes">
+        <span>🔑</span>
+        <span>激活码管理</span>
+      </a>
+      <a class="nav-item" data-page="leaderboard">
+        <span>🏆</span>
+        <span>排行榜</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button id="logoutBtn" class="btn-ghost">
+        <span>🚪</span>
+        <span>退出</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- 移动端顶栏 -->
+  <div class="mobile-header">
+    <button id="menuToggle" class="menu-toggle">☰</button>
+    <span>山东专升本学习管理系统平台</span>
+  </div>
+
+  <!-- 移动端遮罩 -->
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+  <!-- 主内容区 -->
+  <main class="main-content">
+    <!-- 数据看板 -->
+    <section id="page-dashboard" class="page active">
+      <h2 class="page-title">数据看板</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon bg-blue-100"><span class="text-blue-600">👥</span></div>
+          <div class="stat-info">
+            <p class="stat-label">总用户数</p>
+            <p class="stat-value" id="statTotalUsers">-</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon bg-green-100"><span class="text-green-600">📈</span></div>
+          <div class="stat-info">
+            <p class="stat-label">今日活跃</p>
+            <p class="stat-value" id="statTodayActive">-</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon bg-purple-100"><span class="text-purple-600">✏️</span></div>
+          <div class="stat-info">
+            <p class="stat-label">累计答题数</p>
+            <p class="stat-value" id="statTotalAnswers">-</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon bg-amber-100"><span class="text-amber-600">🎯</span></div>
+          <div class="stat-info">
+            <p class="stat-label">平均正确率</p>
+            <p class="stat-value" id="statAvgAccuracy">-</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>用户列表</h3>
+          <span class="text-sm text-gray-400">点击用户查看详情</span>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>激活码</th>
+                <th>累计答题</th>
+                <th>正确率</th>
+                <th>连续打卡</th>
+                <th>最后活跃</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="dashboardUserTable">
+              <tr class="empty-row"><td colspan="7" class="text-center text-gray-400">加载中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 用户管理 -->
+    <section id="page-users" class="page">
+      <h2 class="page-title">用户管理</h2>
+      <div class="card">
+        <div class="card-header">
+          <h3>全部用户</h3>
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="userSearch" placeholder="搜索激活码...">
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>激活码</th>
+                <th>累计答题</th>
+                <th>正确率</th>
+                <th>连续打卡</th>
+                <th>今日答题</th>
+                <th>最后活跃</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="userTableBody">
+              <tr class="empty-row"><td colspan="8" class="text-center text-gray-400">加载中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 激活码管理 -->
+    <section id="page-codes" class="page">
+      <h2 class="page-title">激活码管理</h2>
+      <div class="card">
+        <div class="card-header">
+          <h3>生成激活码</h3>
+        </div>
+        <div class="code-generate">
+          <div class="form-row">
+            <label>生成数量</label>
+            <input type="number" id="genCount" value="1" min="1" max="100">
+          </div>
+          <div class="form-row">
+            <label>备注（可选）</label>
+            <input type="text" id="genNote" placeholder="如：9月份学员">
+          </div>
+          <button id="generateBtn" class="btn-primary">生成激活码</button>
+        </div>
+        <div id="generatedCodes" class="generated-codes"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>激活码列表</h3>
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="codeSearch" placeholder="搜索激活码...">
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>激活码</th>
+                <th>状态</th>
+                <th>激活时间</th>
+                <th>设备ID</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="codeTableBody">
+              <tr class="empty-row"><td colspan="5" class="text-center text-gray-400">加载中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 排行榜 -->
+    <section id="page-leaderboard" class="page">
+      <h2 class="page-title">排行榜</h2>
+      <div class="tab-bar">
+        <button class="tab-btn active" data-type="total">勤学总榜</button>
+        <button class="tab-btn" data-type="daily">今日榜单</button>
+      </div>
+      <div class="card">
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>排名</th>
+                <th>昵称</th>
+                <th>积分/答题数</th>
+                <th>累计答题</th>
+                <th>正确率</th>
+                <th>连续打卡</th>
+              </tr>
+            </thead>
+            <tbody id="lbTableBody">
+              <tr class="empty-row"><td colspan="6" class="text-center text-gray-400">加载中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- 用户详情弹窗 -->
+<div id="userDetailModal" class="modal hidden">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>用户详情</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="userDetailBody"></div>
+  </div>
+</div>
+
+<!-- 笔记弹窗 -->
+<div id="notesModal" class="modal hidden">
+  <div class="modal-content" style="max-width:800px;">
+    <div class="modal-header">
+      <h3>用户笔记 <span id="notesUserCode" style="font-size:13px;color:#888;font-weight:normal;"></span></h3>
+      <button class="modal-close" onclick="closeNotesModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="notesBody" style="max-height:70vh;overflow-y:auto;"></div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
