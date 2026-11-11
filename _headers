@@ -1,0 +1,28 @@
+# 防止 index.html 被 CDN/浏览器缓存，确保用户始终拿到最新版本
+# （assets 下的 JS/CSS 已带 hash，可长期缓存）
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+# 入口 HTML 同样不缓存
+/
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+# 带 hash 的静态资源可长期缓存
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 图片长期缓存
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 字体长期缓存
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
